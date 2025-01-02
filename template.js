@@ -69,7 +69,7 @@ function getRequestUrl() {
 }
 
 function getPostBody() {
-  return makeTableMap(data.leadData || [], 'field', 'value');
+  return makeTableMap(data.leadData || [], 'field', 'value') || {};
 }
 
 function enc(data) {
