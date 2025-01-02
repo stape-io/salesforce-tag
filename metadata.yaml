@@ -1,0 +1,5 @@
+homepage: "https://stape.io/"
+documentation: "https://github.com/stape-io/salesforce-tag"
+versions:
+  - sha: b616d8e3ef5e50dea5f9d2d59ca6a09a8a9918e9
+    changeNotes: Initial release.
