@@ -1,6 +1,8 @@
 homepage: "https://stape.io/"
 documentation: "https://github.com/stape-io/salesforce-tag"
 versions:
+  - sha: 10fd324f5fde8e10d0011eb2f33adf153acc7e1f
+    changeNotes: Fix tag naming.
   - sha: b5cfa5b538c860142712ac51a584165671e4ee54
     changeNotes: Fix issue with empty data table with fields.
   - sha: ff6dec4898cf8538ffbc1e6990088bbbb4429654
