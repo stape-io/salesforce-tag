@@ -1,9 +1,17 @@
 # Salesforce tag for Google Tag Manager Server Side
 
+The Salesforce tag for the server GTM communicates with the Salesforce API.
 
-## How to use the Salesforce tag:
+#### You can use this tag for:
 
-TBD
+- Track Lead events
+- Create new contacts (comming soon)
+
+## How to use Salesforce tag
+
+1. Add Salesforce tag to the server GTM.
+2. Add Salesforce API Key.
+3. Set lead event data.
 
 ## Open Source
 
