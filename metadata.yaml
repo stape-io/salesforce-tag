@@ -1,6 +1,8 @@
-homepage: "https://stape.io/"
-documentation: "https://github.com/stape-io/salesforce-tag"
+homepage: 'https://stape.io/'
+documentation: 'https://github.com/stape-io/salesforce-tag'
 versions:
+  - sha: 76180a6cdb069116597a33608418deca09886a74
+    changeNotes: Added consent section.
   - sha: 10fd324f5fde8e10d0011eb2f33adf153acc7e1f
     changeNotes: Fix tag naming.
   - sha: b5cfa5b538c860142712ac51a584165671e4ee54
