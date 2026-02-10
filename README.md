@@ -13,6 +13,10 @@ The Salesforce tag for the server GTM communicates with the Salesforce API.
 2. Add Salesforce API Key.
 3. Set lead event data.
 
+## Useful links:
+
+[Step-by-step guide on how to configure Salesforce tag](https://stape.io/blog/salesforce-gtm-tag-setup)
+
 ## Open Source
 
 Salesforce Tag for GTM Server Side is developed and maintained by [Stape Team](https://stape.io/) under the Apache 2.0 license.
