@@ -108,34 +108,6 @@ ___TEMPLATE_PARAMETERS___
         "defaultValue": "optional"
       }
     ]
-  },
-  {
-    "displayName": "Logs Settings",
-    "name": "logsGroup",
-    "groupStyle": "ZIPPY_CLOSED",
-    "type": "GROUP",
-    "subParams": [
-      {
-        "type": "RADIO",
-        "name": "logType",
-        "radioItems": [
-          {
-            "value": "no",
-            "displayValue": "Do not log"
-          },
-          {
-            "value": "debug",
-            "displayValue": "Log to console during debug and preview"
-          },
-          {
-            "value": "always",
-            "displayValue": "Always log to console"
-          }
-        ],
-        "simpleValueType": true,
-        "defaultValue": "debug"
-      }
-    ]
   }
 ]
 
@@ -144,11 +116,8 @@ ___SANDBOXED_JS_FOR_SERVER___
 
 const encodeUriComponent = require('encodeUriComponent');
 const getAllEventData = require('getAllEventData');
-const getContainerVersion = require('getContainerVersion');
-const getRequestHeader = require('getRequestHeader');
 const getType = require('getType');
 const JSON = require('JSON');
-const logToConsole = require('logToConsole');
 const makeString = require('makeString');
 const makeTableMap = require('makeTableMap');
 const sendHttpRequest = require('sendHttpRequest');
@@ -162,44 +131,12 @@ if (!isConsentGivenOrNotRequired(data, eventData)) {
   return data.gtmOnSuccess();
 }
 
-const containerVersion = getContainerVersion();
-const isDebug = containerVersion.debugMode;
-const isLoggingEnabled = determinateIsLoggingEnabled();
-const traceId = getRequestHeader('trace-id');
 const requestUrl = getRequestUrl();
 const postBody = getPostBody();
-
-if (isLoggingEnabled) {
-  logToConsole(
-    JSON.stringify({
-      Name: 'Salesforce',
-      Type: 'Request',
-      TraceId: traceId,
-      EventName: 'Lead',
-      RequestMethod: 'POST',
-      RequestUrl: requestUrl,
-      RequestBody: postBody
-    })
-  );
-}
 
 sendHttpRequest(
   requestUrl,
   (statusCode, headers, body) => {
-    if (isLoggingEnabled) {
-      logToConsole(
-        JSON.stringify({
-          Name: 'Salesforce',
-          Type: 'Response',
-          TraceId: traceId,
-          EventName: 'Lead',
-          ResponseStatusCode: statusCode,
-          ResponseHeaders: headers,
-          ResponseBody: body
-        })
-      );
-    }
-
     if (statusCode >= 200 && statusCode < 303) {
       data.gtmOnSuccess();
     } else {
@@ -245,47 +182,10 @@ function isConsentGivenOrNotRequired(data, eventData) {
   return xGaGcs[2] === '1';
 }
 
-function determinateIsLoggingEnabled() {
-  if (!data.logType) {
-    return isDebug;
-  }
-
-  if (data.logType === 'no') {
-    return false;
-  }
-
-  if (data.logType === 'debug') {
-    return isDebug;
-  }
-
-  return data.logType === 'always';
-}
-
 
 ___SERVER_PERMISSIONS___
 
 [
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "all"
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
-    },
-    "isRequired": true
-  },
   {
     "instance": {
       "key": {
@@ -304,81 +204,6 @@ ___SERVER_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
-    },
-    "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "read_request",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "headerWhitelist",
-          "value": {
-            "type": 2,
-            "listItem": [
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "headerName"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
-                    "string": "trace-id"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "key": "headersAllowed",
-          "value": {
-            "type": 8,
-            "boolean": true
-          }
-        },
-        {
-          "key": "requestAccess",
-          "value": {
-            "type": 1,
-            "string": "specific"
-          }
-        },
-        {
-          "key": "headerAccess",
-          "value": {
-            "type": 1,
-            "string": "specific"
-          }
-        },
-        {
-          "key": "queryParameterAccess",
-          "value": {
-            "type": 1,
-            "string": "any"
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
-    },
-    "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "read_container_data",
-        "versionId": "1"
-      },
-      "param": []
     },
     "isRequired": true
   },
@@ -413,6 +238,8 @@ scenarios: []
 
 ___NOTES___
 
-Created on 01/01/2025, 15:55:39
+2026-05-25 Change Notes:
+ - Logging removal.
 
+Created on 01/01/2025, 15:55:39
 
