@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/salesforce-tag'
 versions:
+  - sha: a6c7f5b67e11ee97bea39843be363ff4b47cd249
+    changeNotes: Logging removal.
   - sha: 76180a6cdb069116597a33608418deca09886a74
     changeNotes: Added consent section.
   - sha: 10fd324f5fde8e10d0011eb2f33adf153acc7e1f
