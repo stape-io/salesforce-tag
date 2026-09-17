@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/salesforce-tag'
 versions:
+  - sha: e5c361ed354d3b0822573f4d15568416323af5b3
+    changeNotes: Version update (v67.0).
   - sha: a6c7f5b67e11ee97bea39843be363ff4b47cd249
     changeNotes: Logging removal.
   - sha: 76180a6cdb069116597a33608418deca09886a74
