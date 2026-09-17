@@ -159,7 +159,10 @@ Vendor related functions
 ==============================================================================*/
 
 function getRequestUrl() {
-  return 'https://' + enc(data.instanceDomain) + '/services/data/v57.0/sobjects/Lead/';
+  const API_VERSION = 'v67.0';
+  return (
+    'https://' + enc(data.instanceDomain) + '/services/data/' + API_VERSION + '/sobjects/Lead/'
+  );
 }
 
 function getPostBody() {
