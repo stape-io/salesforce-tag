@@ -1,6 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/salesforce-tag'
 versions:
+  - sha: e9f8cd04584a3b63e2806a0d30cd753b8f18b7e7
+    changeNotes: Add Create a Contact operation, add GTM preview guard, polish UI/README, add tests.
   - sha: e5c361ed354d3b0822573f4d15568416323af5b3
     changeNotes: Version update (v67.0).
   - sha: a6c7f5b67e11ee97bea39843be363ff4b47cd249

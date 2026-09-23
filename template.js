@@ -1,6 +1,7 @@
 ﻿const encodeUriComponent = require('encodeUriComponent');
 const getAllEventData = require('getAllEventData');
 const getType = require('getType');
+const getRequestHeader = require('getRequestHeader');
 const JSON = require('JSON');
 const makeString = require('makeString');
 const makeTableMap = require('makeTableMap');
@@ -11,21 +12,16 @@ const sendHttpRequest = require('sendHttpRequest');
 
 const eventData = getAllEventData();
 
-if (!isConsentGivenOrNotRequired(data, eventData)) {
-  return data.gtmOnSuccess();
-}
+if (shouldExitEarly(data, eventData)) return;
 
-const requestUrl = getRequestUrl();
-const postBody = getPostBody();
+const operation = data.operation || 'lead';
+const requestUrl = getRequestUrl(operation);
+const postBody = getPostBody(data, operation);
 
 sendHttpRequest(
   requestUrl,
   (statusCode, headers, body) => {
-    if (statusCode >= 200 && statusCode < 303) {
-      data.gtmOnSuccess();
-    } else {
-      data.gtmOnFailure();
-    }
+    return statusCode >= 200 && statusCode < 303 ? data.gtmOnSuccess() : data.gtmOnFailure();
   },
   {
     headers: {
@@ -42,20 +38,32 @@ sendHttpRequest(
 Vendor related functions
 ==============================================================================*/
 
-function getRequestUrl() {
+function getRequestUrl(operation) {
   const API_VERSION = 'v67.0';
+  const sObject = operation === 'contact' ? 'Contact' : 'Lead';
   return (
-    'https://' + enc(data.instanceDomain) + '/services/data/' + API_VERSION + '/sobjects/Lead/'
+    'https://' +
+    enc(data.instanceDomain) +
+    '/services/data/' +
+    API_VERSION +
+    '/sobjects/' +
+    sObject +
+    '/'
   );
 }
 
-function getPostBody() {
-  return makeTableMap(data.leadData || [], 'field', 'value') || {};
+function getPostBody(data, operation) {
+  const recordData = operation === 'contact' ? data.contactData : data.leadData;
+  return makeTableMap(recordData || [], 'field', 'value') || {};
 }
 
 /*==============================================================================
 Helpers
 ==============================================================================*/
+
+function getUrl(eventData) {
+  return eventData.page_location || getRequestHeader('referer') || eventData.page_referrer;
+}
 
 function enc(data) {
   if (['null', 'undefined'].indexOf(getType(data)) !== -1) data = '';
@@ -67,4 +75,19 @@ function isConsentGivenOrNotRequired(data, eventData) {
   if (eventData.consent_state) return !!eventData.consent_state.ad_storage;
   const xGaGcs = eventData['x-ga-gcs'] || ''; // x-ga-gcs is a string like "G110"
   return xGaGcs[2] === '1';
+}
+
+function shouldExitEarly(data, eventData) {
+  if (!isConsentGivenOrNotRequired(data, eventData)) {
+    data.gtmOnSuccess();
+    return true;
+  }
+
+  const url = getUrl(eventData);
+  if (url && url.lastIndexOf('https://gtm-msr.appspot.com/', 0) === 0) {
+    data.gtmOnSuccess();
+    return true;
+  }
+
+  return false;
 }
